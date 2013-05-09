@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get photo from gallery"
+                android:id="@+id/gallerybutton" android:layout_gravity="center"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Image"
+                android:id="@+id/getImage" android:layout_gravity="left|center_vertical" android:focusable="false" android:enabled="true"/>
+    </LinearLayout>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Hello World, HomeScreen"
+            />
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="98dp"
+            android:id="@+id/imageView" android:layout_weight="1.27"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Analyse Image"
+            android:id="@+id/analysebutton" android:layout_gravity="center" android:enabled="false"/>
+</LinearLayout>
+

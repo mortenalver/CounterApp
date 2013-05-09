@@ -4,3 +4,7 @@
 *.jar
 *.war
 *.ear
+gen
+.idea
+CounterApp.iml
+out

@@ -28,7 +28,7 @@ public class ParticleAnalyzer {
         int skip = useSkip ? (int)Math.floor(0.5*Math.sqrt((float)minSize)) : 1;
         if (skip < 1) skip = 1;
 
-        Log.d("counter", "Skip = "+skip);
+        Log.v("counter", "Skip = "+skip);
 
         count = 0;
         int totSize = 0, highestSize = 0;
@@ -41,7 +41,7 @@ public class ParticleAnalyzer {
                     // We found a white pixel which isn't part of a previous particle.
                     clearMatr(scratch);
                     int size = handleParticle(i, j);
-                    Log.d("counter", "Size="+size+", xmi="+xmi+", xma="+xma+", ymi="+ymi+", yma="+yma);
+                    Log.v("counter", "Size="+size+", xmi="+xmi+", xma="+xma+", ymi="+ymi+", yma="+yma);
 
                     if (size >= minSize && size <= maxSize) {
                         //int markVal = rand() % 255;
@@ -75,7 +75,7 @@ public class ParticleAnalyzer {
     }
 
     private int handleParticle(int si, int sj) {
-        Log.d("counter","handleParticle: i="+si+", j="+sj);
+        Log.v("counter","handleParticle: i="+si+", j="+sj);
         xma = 0;
         xmi = image.length;
         yma = 0;

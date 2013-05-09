@@ -23,14 +23,14 @@ public class BasicAlgo implements Algorithm {
 
     @Override
     public void analyseImage(Bitmap image) {
-        Log.d("counter", "BasicAlgo starting");
-        Log.d("counter", "Image dimensions: "+image.getWidth()+"x"+image.getHeight());
+        Log.v("counter", "BasicAlgo starting");
+        Log.v("counter", "Image dimensions: "+image.getWidth()+"x"+image.getHeight());
 
         resultImage = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
         //resultImage = image.copy(image.getConfig(), true);
         //resultImage = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight());
 
-        Log.d("counter", "Starting image handling");
+        Log.v("counter", "Starting image handling");
         int[] pixels = new int[image.getHeight()*image.getWidth()];
         boolean[][] binaryMatrix = new boolean[image.getHeight()][image.getWidth()];
         try {
@@ -50,7 +50,7 @@ public class BasicAlgo implements Algorithm {
 
             ParticleAnalyzer pa = new ParticleAnalyzer();
             int count = pa.analyzeImage(binaryMatrix, 10, 200000, true);
-            Log.d("counter", "Particle analyzer returned: "+count);
+            Log.v("counter", "Particle analyzer returned: "+count);
 
             binaryMatrix = pa.getRetImage();
 
@@ -59,14 +59,14 @@ public class BasicAlgo implements Algorithm {
                     pixels[j+i*image.getWidth()] = binaryMatrix[i][j] ? Color.RED : Color.BLACK;
 
             resultImage.setPixels(pixels, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
-            Log.d("counter", "Done");
+            Log.v("counter", "Done");
         } catch (Throwable ex) {
             Log.d("counter", "Error", ex);
         }
 
 
 
-        Log.d("counter", "BasicAlgo done: result = "+result);
+        Log.v("counter", "BasicAlgo done: result = "+result);
     }
 
     @Override

@@ -8,33 +8,71 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  *
  */
 public class AnalyseScreen extends Activity {
 
-    public static final int sampleWidth = 50;
+    public static final int sampleWidth = 100;
+    public static final int algoPerRow = 4;
     Bitmap photo = null;
-    ImageView imageView1, imageView2;
-    Algorithm algorithm1 = new BasicAlgo(0.75f);
-    Algorithm algorithm2 = new BasicAlgo(0.65f);
+    ArrayList<ImageView> iv = new ArrayList<ImageView>();
+    ArrayList<Algorithm> algos = new ArrayList<Algorithm>();
     TextView count = null;
+    LinearLayout mainL;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.analysescreen);
-        //photo = (Bitmap)getIntent().getExtras().get("photo");
+        mainL = new LinearLayout(this);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(10, 10, 10, 0);
+
+        Log.d("counter", "1");
+        setContentView(mainL);
+        Log.d("counter", "2");
+        mainL.setOrientation(LinearLayout.VERTICAL);
+        Log.d("counter", "3");
+        mainL.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        Log.d("counter", "4");
+
+        for (double d=0.1; d<1.0; d+=0.1)
+            algos.add(new BasicAlgo((float)d));
+
+        Log.d("counter", "Added "+algos.size()+" algorithms.");
+
         photo = getSmallPhoto(HomeScreen.photo, sampleWidth);//grabImage(Uri.parse(getIntent().getStringExtra("imageUri")));
-        imageView1 = (ImageView)findViewById(R.id.imageView);
+        LinearLayout rowL = null;
+
+        for (int i=0; i<algos.size(); i++) {
+            ImageView iv = new ImageView(this);
+            iv.setImageBitmap(null);
+
+            if ((rowL == null) || (rowL.getChildCount() == algoPerRow)) {
+                rowL = new LinearLayout(this);
+                rowL.setOrientation(LinearLayout.HORIZONTAL);
+                mainL.addView(rowL);
+            }
+            rowL.addView(iv, layoutParams);
+            new DoImageAnalysis(String.valueOf(i+1), algos.get(i), photo, iv).execute("");
+        }
+
+
+        //photo = (Bitmap)getIntent().getExtras().get("photo");
+        /*imageView1 = (ImageView)findViewById(R.id.imageView);
         imageView1.setImageBitmap(null);
         imageView2 = (ImageView)findViewById(R.id.imageView1);
         imageView2.setImageBitmap(null);
         count = (TextView)findViewById(R.id.count);
-        new DoImageAnalysis(algorithm1, photo, imageView1).execute("");
-        new DoImageAnalysis(algorithm2, photo, imageView2).execute("");
+
+        new DoImageAnalysis(algorithm2, photo, imageView2).execute("");*/
 
     }
 
@@ -69,11 +107,13 @@ public class AnalyseScreen extends Activity {
     private class DoImageAnalysis extends AsyncTask<String, Void, String> {
 
 
+        private String tag;
         private Algorithm algo;
         private Bitmap photo;
         private ImageView targetView;
 
-        public DoImageAnalysis(Algorithm algo, Bitmap photo, ImageView targetView) {
+        public DoImageAnalysis(String tag, Algorithm algo, Bitmap photo, ImageView targetView) {
+            this.tag = tag;
             this.algo = algo;
             this.photo = photo;
             this.targetView = targetView;
@@ -81,22 +121,22 @@ public class AnalyseScreen extends Activity {
 
         @Override
         protected String doInBackground(String... params) {
-            Log.d("counter", "doInBackground");
+            Log.d("counter", "Image analysis worker: "+tag);
             algo.analyseImage(this.photo);
             return null;
         }
 
         @Override
         protected void onPreExecute() {
-            Log.d("counter", "onPre");
+            Log.d("counter", "onPre, worker "+tag);
 
         }
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("counter", "onPost");
+            Log.d("counter", "onPost: "+algo.getResultImage()+", "+targetView);
             targetView.setImageBitmap(algo.getResultImage());
-            count.setText("Number of particles: "+algo.getResult());
+            //count.setText("Number of particles: "+algo.getResult());
         }
     }
 }
